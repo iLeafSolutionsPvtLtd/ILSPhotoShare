@@ -5,22 +5,50 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:image_picker_saver/image_picker_saver.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_villains/villain.dart';
+import 'package:image_picker_modern/image_picker_modern.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:photo_share/containers/image_editor.dart';
+import 'package:photo_share/redux/actions/navigation_actions.dart';
+import 'package:photo_share/redux/middlewares/app_middleware.dart';
+import 'package:photo_share/redux/reducers/app_state_reducer.dart';
+import 'package:photo_share/redux/states/app_state.dart';
+import 'package:photo_share/utilities/keys.dart';
+import 'package:redux/redux.dart';
 
-void main() => runApp(MyApp());
+import 'containers/about_us.dart';
+import 'containers/contact_us.dart';
 
-class MyApp extends StatelessWidget {
+void main() => runApp(MyAppBase());
+
+final Store<AppState> store = Store<AppState>(
+  appStateReducer,
+  initialState: AppState.initial(),
+  middleware: appMiddleware(),
+);
+
+class MyAppBase extends StatelessWidget {
   // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return StoreProvider<AppState>(
+      store: store,
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        navigatorObservers: [new VillainTransitionObserver()],
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: MyHomePage(),
+        navigatorKey: Keys.navKey,
+        routes: <String, WidgetBuilder>{
+          "/ContactUsView": (BuildContext context) => ContactUsView(),
+          "/AboutUsView": (BuildContext context) => AboutUsView(),
+          "/ImageEditingView": (BuildContext context) => ImageEditingView(),
+        },
       ),
-      home: MyHomePage(),
     );
   }
 }
@@ -37,7 +65,13 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   GlobalKey previewContainer = new GlobalKey();
   GlobalKey scaffoldKey = new GlobalKey();
-
+  var icons = [
+    "assets/camera.png",
+    "assets/gallery.png",
+    "assets/info.png",
+    "assets/contact.png",
+  ];
+  var titles = ["Camera", "Gallery", "About us", "Contact us"];
   @override
   Widget build(BuildContext context) {
     return RepaintBoundary(
@@ -85,8 +119,78 @@ class _MyHomePageState extends State<MyHomePage> {
                           itemBuilder: (BuildContext context, int index) {
                             return Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: GridTile(
-                                child: GridItem(),
+                              child: Villain(
+                                villainAnimation: VillainAnimation.fromLeft(
+                                  offset: 1.0 - index / 40,
+                                  from: Duration(milliseconds: 100),
+                                  to: Duration(seconds: 1),
+                                ),
+                                animateExit: false,
+                                secondaryVillainAnimation:
+                                    VillainAnimation.fade(),
+                                child: GridTile(
+                                  child: StoreConnector<AppState, _ViewModel>(
+                                    converter: _ViewModel.fromStore,
+                                    distinct: true,
+                                    builder: (context, viewModel) {
+                                      return GridItem(
+                                        didSelect: (index) async {
+                                          switch (index) {
+                                            case 0:
+                                              var image =
+                                                  await ImagePicker.pickImage(
+                                                      source:
+                                                          ImageSource.camera);
+                                              if (image != null) {
+                                                var directory =
+                                                    await getApplicationDocumentsDirectory();
+                                                var path = directory.path;
+                                                File savedImage =
+                                                    await image.copy(
+                                                        '$path/saved_image.jpg');
+                                                viewModel
+                                                    .navigateToImageEditor();
+                                              }
+
+                                              return;
+                                            case 1:
+                                              var image =
+                                                  await ImagePicker.pickImage(
+                                                      source:
+                                                          ImageSource.gallery);
+                                              if (image != null) {
+                                                var directory =
+                                                    await getApplicationDocumentsDirectory();
+                                                var path = directory.path;
+                                                File savedImage =
+                                                    await image.copy(
+                                                        '$path/saved_image.jpg');
+                                                viewModel
+                                                    .navigateToImageEditor();
+                                              }
+                                              return;
+                                            case 2:
+                                              viewModel.navigateToAboutUs();
+                                              return;
+                                            case 3:
+                                              viewModel.navigateToContactUs();
+                                              return;
+                                          }
+
+//                                    var gallery =
+//                                        await ImagePickerSaver.pickImage(
+//                                      source: ImageSource.gallery,
+//                                    );
+
+                                          //savedImage.writeAsBytes(null);
+                                        },
+                                        icon: icons[index],
+                                        title: titles[index],
+                                        index: index,
+                                      );
+                                    },
+                                  ),
+                                ),
                               ),
                             );
                           }),
@@ -100,6 +204,25 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
     );
+  }
+}
+
+class _ViewModel {
+  Function navigateToAboutUs;
+  Function navigateToContactUs;
+  Function navigateToImageEditor;
+  _ViewModel(
+      {this.navigateToAboutUs,
+      this.navigateToContactUs,
+      this.navigateToImageEditor});
+  static _ViewModel fromStore(Store<AppState> store) {
+    return _ViewModel(navigateToAboutUs: () {
+      store.dispatch(NavigateToAboutUsPage());
+    }, navigateToContactUs: () {
+      store.dispatch(NavigateToContactUsPage());
+    }, navigateToImageEditor: () {
+      store.dispatch(NavigateToImageEditingPage());
+    });
   }
 }
 
@@ -123,8 +246,8 @@ class _NewWidgetState extends State<NewWidget> {
 ////        _image2 = Image.memory(pngBytes.buffer.asUint8List());
 //      });
 
-    var filePath = await ImagePickerSaver.saveFile(
-        fileData: byteData.buffer.asUint8List());
+//    var filePath = await ImagePickerSaver.saveFile(
+//        fileData: byteData.buffer.asUint8List());
 //      final directory = (await getApplicationDocumentsDirectory()).path;
 //      File imgFile = new File('$directory/screenshot.png');
 //      imgFile.writeAsBytes(pngBytes);
@@ -148,7 +271,9 @@ class _NewWidgetState extends State<NewWidget> {
       children: <Widget>[
         Padding(
           padding: EdgeInsets.only(bottom: 15.0),
-          child: new GridItem(),
+          child: new GridItem(
+            didSelect: (index) async {},
+          ),
         ),
         Padding(
           padding: const EdgeInsets.only(bottom: 15.0),
@@ -183,9 +308,12 @@ class _NewWidgetState extends State<NewWidget> {
 }
 
 class GridItem extends StatelessWidget {
-  const GridItem({
-    Key key,
-  }) : super(key: key);
+  final int index;
+  final Function(int) didSelect;
+  final String icon;
+  final title;
+  const GridItem({Key key, this.didSelect, this.title, this.icon, this.index})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -199,19 +327,23 @@ class GridItem extends StatelessWidget {
           ),
           width: (MediaQuery.of(context).size.width / 2) - 24,
           height: (MediaQuery.of(context).size.width / 2) - 24,
-          child: IconButton(
-              icon: Icon(
-                Icons.add_a_photo,
-                size: 50,
-              ),
-              onPressed: () async {
-                var gallery = await ImagePickerSaver.pickImage(
-                  source: ImageSource.camera,
-                );
-                var directory = await getApplicationDocumentsDirectory();
-                var path = directory.path;
-                File savedImage = await gallery.copy('$path/saved_image.jpg');
-              }),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              IconButton(
+                  iconSize: 50,
+                  icon: Image.asset(
+                    icon,
+                    width: 30.0,
+                    height: 30.0,
+                  ),
+                  onPressed: () async {
+                    didSelect(index);
+                  }),
+              Text(title),
+            ],
+          ),
         ),
       ),
     );

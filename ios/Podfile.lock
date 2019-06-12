@@ -1,33 +1,70 @@
 PODS:
-  - Flutter (1.0.0)
-  - image_picker (0.0.1):
+  - camera (0.0.1):
     - Flutter
-  - image_picker_saver (0.0.1):
+  - connectivity (0.0.1):
+    - Flutter
+    - Reachability
+  - Flutter (1.0.0)
+  - flutter_secure_storage (3.2.0):
+    - Flutter
+  - image_gallery_saver (0.0.1):
+    - Flutter
+  - image_picker_modern (0.0.1):
+    - Flutter
+  - native_device_orientation (0.0.1):
     - Flutter
   - path_provider (0.0.1):
     - Flutter
+  - Reachability (3.2)
+  - shared_preferences (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
+  - camera (from `.symlinks/plugins/camera/ios`)
+  - connectivity (from `.symlinks/plugins/connectivity/ios`)
   - Flutter (from `.symlinks/flutter/ios`)
-  - image_picker (from `.symlinks/plugins/image_picker/ios`)
-  - image_picker_saver (from `.symlinks/plugins/image_picker_saver/ios`)
+  - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
+  - image_gallery_saver (from `.symlinks/plugins/image_gallery_saver/ios`)
+  - image_picker_modern (from `.symlinks/plugins/image_picker_modern/ios`)
+  - native_device_orientation (from `.symlinks/plugins/native_device_orientation/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
+  - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Reachability
 
 EXTERNAL SOURCES:
+  camera:
+    :path: ".symlinks/plugins/camera/ios"
+  connectivity:
+    :path: ".symlinks/plugins/connectivity/ios"
   Flutter:
     :path: ".symlinks/flutter/ios"
-  image_picker:
-    :path: ".symlinks/plugins/image_picker/ios"
-  image_picker_saver:
-    :path: ".symlinks/plugins/image_picker_saver/ios"
+  flutter_secure_storage:
+    :path: ".symlinks/plugins/flutter_secure_storage/ios"
+  image_gallery_saver:
+    :path: ".symlinks/plugins/image_gallery_saver/ios"
+  image_picker_modern:
+    :path: ".symlinks/plugins/image_picker_modern/ios"
+  native_device_orientation:
+    :path: ".symlinks/plugins/native_device_orientation/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
+  shared_preferences:
+    :path: ".symlinks/plugins/shared_preferences/ios"
 
 SPEC CHECKSUMS:
+  camera: be01db3b2193839f9af56a9db99b7fea444d35f3
+  connectivity: d5992e3758d68b1c4b12d6e012fe0813f1aa1645
   Flutter: 9d0fac939486c9aba2809b7982dfdbb47a7b0296
-  image_picker: ee00aab0487cedc80a304085219503cc6d0f2e22
-  image_picker_saver: c674305b2e535d97afabfdff4e036f5da73e0167
+  flutter_secure_storage: dbcc8ff35d99569c3a4d3b483afa3339416c1a78
+  image_gallery_saver: 131b261a8ab8576f9012ef4115162e5b0d51a07f
+  image_picker_modern: 8033a201077bb4a92a5028894913e58cc8830c25
+  native_device_orientation: 1126735962ee926c7067a26ee9b0be020d3f5890
   path_provider: 09407919825bfe3c2deae39453b7a5b44f467873
+  Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
+  shared_preferences: 5a1d487c427ee18fcd3ea1f2a131569481834b53
 
 PODFILE CHECKSUM: 58760ca3c5878cb71ae11bd6eeff33fd4ce06e4f
 
