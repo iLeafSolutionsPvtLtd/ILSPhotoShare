@@ -7,9 +7,10 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_villains/villain.dart';
-import 'package:image_picker_modern/image_picker_modern.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:photo_share/containers/image_editor.dart';
+import 'package:photo_share/redux/actions/image_editing_actions.dart';
 import 'package:photo_share/redux/actions/navigation_actions.dart';
 import 'package:photo_share/redux/middlewares/app_middleware.dart';
 import 'package:photo_share/redux/reducers/app_state_reducer.dart';
@@ -105,9 +106,20 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 Center(
                     child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(left: 15.0, bottom: 20.0),
+                      child: Text(
+                        'Photo Share',
+                        style: TextStyle(
+                            fontFamily: 'JTLeonor',
+                            color: Colors.white,
+                            fontWeight: FontWeight.w100,
+                            fontSize: 50.0),
+                      ),
+                    ),
                     Container(
                       child: GridView.builder(
                           itemCount: 4,
@@ -148,6 +160,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                                 File savedImage =
                                                     await image.copy(
                                                         '$path/saved_image.jpg');
+                                                viewModel.updateSelectedImage(
+                                                    savedImage);
                                                 viewModel
                                                     .navigateToImageEditor();
                                               }
@@ -165,6 +179,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                                 File savedImage =
                                                     await image.copy(
                                                         '$path/saved_image.jpg');
+                                                viewModel.updateSelectedImage(
+                                                    savedImage);
                                                 viewModel
                                                     .navigateToImageEditor();
                                               }
@@ -176,13 +192,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                               viewModel.navigateToContactUs();
                                               return;
                                           }
-
-//                                    var gallery =
-//                                        await ImagePickerSaver.pickImage(
-//                                      source: ImageSource.gallery,
-//                                    );
-
-                                          //savedImage.writeAsBytes(null);
                                         },
                                         icon: icons[index],
                                         title: titles[index],
@@ -211,10 +220,12 @@ class _ViewModel {
   Function navigateToAboutUs;
   Function navigateToContactUs;
   Function navigateToImageEditor;
+  Function(File) updateSelectedImage;
   _ViewModel(
       {this.navigateToAboutUs,
       this.navigateToContactUs,
-      this.navigateToImageEditor});
+      this.navigateToImageEditor,
+      this.updateSelectedImage});
   static _ViewModel fromStore(Store<AppState> store) {
     return _ViewModel(navigateToAboutUs: () {
       store.dispatch(NavigateToAboutUsPage());
@@ -222,6 +233,8 @@ class _ViewModel {
       store.dispatch(NavigateToContactUsPage());
     }, navigateToImageEditor: () {
       store.dispatch(NavigateToImageEditingPage());
+    }, updateSelectedImage: (imageFile) {
+      store.dispatch(UpdateSelectedImage(image: imageFile));
     });
   }
 }
@@ -341,7 +354,10 @@ class GridItem extends StatelessWidget {
                   onPressed: () async {
                     didSelect(index);
                   }),
-              Text(title),
+              Text(
+                title,
+                style: TextStyle(fontFamily: 'JTLeonor', color: Colors.white),
+              ),
             ],
           ),
         ),

@@ -1,4 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:photo_share/redux/actions/navigation_actions.dart';
+import 'package:photo_share/redux/states/app_state.dart';
+import 'package:redux/redux.dart';
 import 'package:screenshot/screenshot.dart';
 
 class ImageEditingView extends StatefulWidget {
@@ -43,10 +49,41 @@ class _ImageEditingViewState extends State<ImageEditingView> {
       ),
       body: Screenshot(
           controller: screenshotController,
-          child: Container(
-            color: Colors.grey,
-//            child: Image.file(null),
-          )),
+          child: StoreConnector<AppState, _ViewModel>(
+              converter: _ViewModel.fromStore,
+              builder: (context, viewModel) {
+                return Container(
+                  color: Colors.grey,
+                  child: viewModel.selectedImage == null
+                      ? Text('Select Image')
+                      : Image.file(viewModel.selectedImage),
+                );
+              })),
     );
+  }
+}
+
+class _ViewModel {
+  Function navigateToAboutUs;
+  Function navigateToContactUs;
+  Function navigateToImageEditor;
+  File selectedImage;
+  _ViewModel(
+      {this.navigateToAboutUs,
+      this.navigateToContactUs,
+      this.navigateToImageEditor,
+      this.selectedImage});
+  static _ViewModel fromStore(Store<AppState> store) {
+    return _ViewModel(
+        navigateToAboutUs: () {
+          store.dispatch(NavigateToAboutUsPage());
+        },
+        navigateToContactUs: () {
+          store.dispatch(NavigateToContactUsPage());
+        },
+        navigateToImageEditor: () {
+          store.dispatch(NavigateToImageEditingPage());
+        },
+        selectedImage: store.state.imageEditorState.selectedImage);
   }
 }

@@ -4,19 +4,32 @@ import 'package:equatable/equatable.dart';
 
 import 'auth_state.dart';
 import 'home_page_state.dart';
+import 'image_editor_state.dart';
 
 class AppState extends Equatable {
   final bool isLoading;
   final AuthState authState;
   final File selectedImage;
   final HomePageState homePageState;
+  final ImageEditorState imageEditorState;
   AppState(
-      {this.authState, this.homePageState, this.isLoading, this.selectedImage})
-      : super([isLoading, authState, selectedImage, homePageState]);
+      {this.authState,
+      this.homePageState,
+      this.isLoading,
+      this.selectedImage,
+      this.imageEditorState})
+      : super([
+          isLoading,
+          authState,
+          selectedImage,
+          homePageState,
+          imageEditorState
+        ]);
 
   factory AppState.initial() => AppState(
       authState: AuthState.initial(),
       homePageState: HomePageState.initial(),
+      imageEditorState: ImageEditorState.initial(),
       selectedImage: null,
       isLoading: false);
 
@@ -31,20 +44,4 @@ class AppState extends Equatable {
       isLoading: isLoading ?? this.isLoading,
     );
   }
-
-//  @override
-//  bool operator ==(Object other) =>
-//      identical(this, other) ||
-//      other is AppState &&
-//          runtimeType == other.runtimeType &&
-//          authState == other.authState &&
-//          homePageState == other.homePageState &&
-//          isLoading == other.isLoading;
-//
-//  @override
-//  int get hashCode => authState.hashCode ^ homePageState.hashCode;
-//  @override
-//  String toString() {
-//    return '';
-//  }
 }

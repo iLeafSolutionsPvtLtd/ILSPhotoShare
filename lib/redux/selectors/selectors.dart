@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:photo_share/models/loading_status.dart';
 import 'package:photo_share/redux/states/app_state.dart';
 
@@ -20,3 +22,5 @@ bool isPasswordValid(AppState state) => state.authState.passwordError;
 bool isLoggedIn(AppState state) => state.authState.isLoggedIn;
 
 bool showAlert(AppState state) => state.authState.apiResponseHandler.showAlert;
+
+File selectedImage(AppState state) => state.selectedImage;
