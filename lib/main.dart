@@ -7,14 +7,13 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_villains/villain.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:photo_share/containers/image_editor.dart';
 import 'package:photo_share/redux/actions/image_editing_actions.dart';
 import 'package:photo_share/redux/actions/navigation_actions.dart';
 import 'package:photo_share/redux/middlewares/app_middleware.dart';
 import 'package:photo_share/redux/reducers/app_state_reducer.dart';
 import 'package:photo_share/redux/states/app_state.dart';
+import 'package:photo_share/utilities/colors.dart';
 import 'package:photo_share/utilities/keys.dart';
 import 'package:redux/redux.dart';
 
@@ -88,19 +87,21 @@ class _MyHomePageState extends State<MyHomePage> {
             color: Colors.blue,
             child: Stack(
               children: <Widget>[
-                Image.asset(
-                  'assets/8478.jpg',
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height,
-                  fit: BoxFit.cover,
-                ),
                 Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height,
-                  child: BackdropFilter(
-                    filter: ui.ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-                    child: Container(
-                      color: Colors.black.withOpacity(0),
+                  // Add box decoration
+                  decoration: BoxDecoration(
+                    // Box decoration takes a gradient
+                    gradient: LinearGradient(
+                      // Where the linear gradient begins and ends
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      // Add one stop for each color. Stops should increase from 0 to 1
+                      stops: [0.0, 1.0],
+                      colors: [
+                        // Colors are easy thanks to Flutter's Colors class.
+                        iLColors.gradient1,
+                        iLColors.gradient2
+                      ],
                     ),
                   ),
                 ),
@@ -146,53 +147,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     distinct: true,
                                     builder: (context, viewModel) {
                                       return GridItem(
-                                        didSelect: (index) async {
-                                          switch (index) {
-                                            case 0:
-                                              var image =
-                                                  await ImagePicker.pickImage(
-                                                      source:
-                                                          ImageSource.camera);
-                                              if (image != null) {
-                                                var directory =
-                                                    await getApplicationDocumentsDirectory();
-                                                var path = directory.path;
-                                                File savedImage =
-                                                    await image.copy(
-                                                        '$path/saved_image.jpg');
-                                                viewModel.updateSelectedImage(
-                                                    savedImage);
-                                                viewModel
-                                                    .navigateToImageEditor();
-                                              }
-
-                                              return;
-                                            case 1:
-                                              var image =
-                                                  await ImagePicker.pickImage(
-                                                      source:
-                                                          ImageSource.gallery);
-                                              if (image != null) {
-                                                var directory =
-                                                    await getApplicationDocumentsDirectory();
-                                                var path = directory.path;
-                                                File savedImage =
-                                                    await image.copy(
-                                                        '$path/saved_image.jpg');
-                                                viewModel.updateSelectedImage(
-                                                    savedImage);
-                                                viewModel
-                                                    .navigateToImageEditor();
-                                              }
-                                              return;
-                                            case 2:
-                                              viewModel.navigateToAboutUs();
-                                              return;
-                                            case 3:
-                                              viewModel.navigateToContactUs();
-                                              return;
-                                          }
-                                        },
+                                        didSelect: (index) async {},
                                         icon: icons[index],
                                         title: titles[index],
                                         index: index,
@@ -213,6 +168,154 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
     );
+  }
+
+  void continueToSave() {
+//    if (Platform.isAndroid) {
+//      var permissionNames =
+//          await Permission
+//          .requestPermissions([
+//        PermissionName.Storage,
+//      ]);
+//
+//      switch (permissionNames
+//          .first.permissionStatus) {
+//        case PermissionStatus.allow:
+//          switch (index) {
+//            case 0:
+//              var image = await ImagePicker
+//                  .pickImage(
+//                  source: ImageSource
+//                      .camera);
+//              if (image != null) {
+//                viewModel
+//                    .updateSelectedImage(
+//                    image);
+//                viewModel
+//                    .navigateToImageEditor();
+//              }
+//
+//              return;
+//            case 1:
+//              var image = await ImagePicker
+//                  .pickImage(
+//                  source: ImageSource
+//                      .gallery);
+//              if (image != null) {
+//                viewModel
+//                    .updateSelectedImage(
+//                    image);
+//                viewModel
+//                    .navigateToImageEditor();
+//              }
+//              return;
+//            case 2:
+//              viewModel
+//                  .navigateToAboutUs();
+//              return;
+//            case 3:
+//              viewModel
+//                  .navigateToContactUs();
+//              return;
+//          }
+//          // TODO: Handle this case.
+//          break;
+//        case PermissionStatus.deny:
+//          Permission.openSettings();
+//
+//          // TODO: Handle this case.
+//
+//          break;
+//        case PermissionStatus.notDecided:
+//          Permission.openSettings();
+//
+//          // TODO: Handle this case.
+//          break;
+//        case PermissionStatus.notAgain:
+//          Permission.openSettings();
+//
+//          // TODO: Handle this case.
+//          break;
+//        case PermissionStatus.whenInUse:
+//          Permission.openSettings();
+//          // TODO: Handle this case.
+//          break;
+//        case PermissionStatus.always:
+//          switch (index) {
+//            case 0:
+//              var image = await ImagePicker
+//                  .pickImage(
+//                  source: ImageSource
+//                      .camera);
+//              if (image != null) {
+//                viewModel
+//                    .updateSelectedImage(
+//                    image);
+//                viewModel
+//                    .navigateToImageEditor();
+//              }
+//
+//              return;
+//            case 1:
+//              var image = await ImagePicker
+//                  .pickImage(
+//                  source: ImageSource
+//                      .gallery);
+//              if (image != null) {
+//                viewModel
+//                    .updateSelectedImage(
+//                    image);
+//                viewModel
+//                    .navigateToImageEditor();
+//              }
+//              return;
+//            case 2:
+//              viewModel
+//                  .navigateToAboutUs();
+//              return;
+//            case 3:
+//              viewModel
+//                  .navigateToContactUs();
+//              return;
+//          }
+//          // TODO: Handle this case.
+//          break;
+//      }
+//    } else {
+//      switch (index) {
+//        case 0:
+//          var image =
+//              await ImagePicker.pickImage(
+//              source:
+//              ImageSource.camera);
+//          if (image != null) {
+//            viewModel.updateSelectedImage(
+//                image);
+//            viewModel
+//                .navigateToImageEditor();
+//          }
+//
+//          return;
+//        case 1:
+//          var image =
+//              await ImagePicker.pickImage(
+//              source: ImageSource
+//                  .gallery);
+//          if (image != null) {
+//            viewModel.updateSelectedImage(
+//                image);
+//            viewModel
+//                .navigateToImageEditor();
+//          }
+//          return;
+//        case 2:
+//          viewModel.navigateToAboutUs();
+//          return;
+//        case 3:
+//          viewModel.navigateToContactUs();
+//          return;
+//      }
+//    }
   }
 }
 

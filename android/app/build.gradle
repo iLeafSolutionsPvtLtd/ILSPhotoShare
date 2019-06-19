@@ -41,9 +41,9 @@ android {
         applicationId "com.ileafsolutions.photo_share"
         minSdkVersion 21
         targetSdkVersion 28
-        multiDexEnabled true
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -62,14 +62,7 @@ flutter {
 dependencies {
     compile 'com.google.android.gms:play-services:+'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.android.support:multidex:1.0.3'
     testImplementation 'junit:junit:4.12'
-    implementation "com.android.support:appcompat-v7:27.1.1"
-    /*implementation ('org.eclipse.paho:org.eclipse.paho.android.service:1.0.2') {
-        exclude group: 'com.android.support', module:'support-v4'
-    }
-    implementation ("com.jakewharton:butterknife:8.8.1") {
-        exclude group: 'com.android.support', module: 'support-v4'
-        exclude group: 'com.android.support', module: 'support-annotation'
-        exclude group: 'com.android.support', module: 'support-compat'
-    }*/
+//    implementation "com.android.support:appcompat-v7:27.1.1"
 }
