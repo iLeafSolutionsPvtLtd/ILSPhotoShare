@@ -48,6 +48,10 @@ dependencies:
   image_gallery_saver: ^1.1.0
   permission: ^0.1.2
   geocoder: ^0.1.2
+  location: ^2.3.5
+  flutter_email_sender: ^2.0.3
+  url_launcher: ^5.0.3
+  esys_flutter_share: ^1.0.2
 
 
 
@@ -74,6 +78,7 @@ flutter:
      - assets/contact.png
      - assets/gallery.png
      - assets/info.png
+     - assets/logo.png
 
   fonts:
      - family: JTLeonor

@@ -44,6 +44,10 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true
+        compileOptions {
+            sourceCompatibility 1.8
+            targetCompatibility 1.8
+        }
     }
 
     buildTypes {
@@ -59,10 +63,11 @@ flutter {
     source '../..'
 }
 
+
+
 dependencies {
     compile 'com.google.android.gms:play-services:+'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.android.support:multidex:1.0.3'
     testImplementation 'junit:junit:4.12'
-//    implementation "com.android.support:appcompat-v7:27.1.1"
 }

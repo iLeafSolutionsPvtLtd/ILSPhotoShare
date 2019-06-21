@@ -2,42 +2,48 @@ PODS:
   - connectivity (0.0.1):
     - Flutter
     - Reachability
+  - esys_flutter_share (0.0.1):
+    - Flutter
   - Flutter (1.0.0)
+  - flutter_email_sender (0.0.1):
+    - Flutter
   - flutter_secure_storage (3.2.0):
     - Flutter
-  - geolocator (5.0.1):
-    - Flutter
-  - google_api_availability (2.0.1):
+  - geocoder (0.0.1):
     - Flutter
   - image_gallery_saver (0.0.1):
     - Flutter
   - image_picker (0.0.1):
     - Flutter
-  - location_permissions (2.0.2):
+  - location (0.0.1):
     - Flutter
   - native_device_orientation (0.0.1):
     - Flutter
   - path_provider (0.0.1):
     - Flutter
+  - permission (0.0.1):
+    - Flutter
   - Reachability (3.2)
   - shared_preferences (0.0.1):
     - Flutter
-  - simple_permissions (0.0.1):
+  - url_launcher (0.0.1):
     - Flutter
 
 DEPENDENCIES:
   - connectivity (from `.symlinks/plugins/connectivity/ios`)
-  - Flutter (from `.symlinks/flutter/ios`)
+  - esys_flutter_share (from `.symlinks/plugins/esys_flutter_share/ios`)
+  - Flutter (from `.symlinks/flutter/ios-release`)
+  - flutter_email_sender (from `.symlinks/plugins/flutter_email_sender/ios`)
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
-  - geolocator (from `.symlinks/plugins/geolocator/ios`)
-  - google_api_availability (from `.symlinks/plugins/google_api_availability/ios`)
+  - geocoder (from `.symlinks/plugins/geocoder/ios`)
   - image_gallery_saver (from `.symlinks/plugins/image_gallery_saver/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
-  - location_permissions (from `.symlinks/plugins/location_permissions/ios`)
+  - location (from `.symlinks/plugins/location/ios`)
   - native_device_orientation (from `.symlinks/plugins/native_device_orientation/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
+  - permission (from `.symlinks/plugins/permission/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
-  - simple_permissions (from `.symlinks/plugins/simple_permissions/ios`)
+  - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -46,43 +52,49 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   connectivity:
     :path: ".symlinks/plugins/connectivity/ios"
+  esys_flutter_share:
+    :path: ".symlinks/plugins/esys_flutter_share/ios"
   Flutter:
-    :path: ".symlinks/flutter/ios"
+    :path: ".symlinks/flutter/ios-release"
+  flutter_email_sender:
+    :path: ".symlinks/plugins/flutter_email_sender/ios"
   flutter_secure_storage:
     :path: ".symlinks/plugins/flutter_secure_storage/ios"
-  geolocator:
-    :path: ".symlinks/plugins/geolocator/ios"
-  google_api_availability:
-    :path: ".symlinks/plugins/google_api_availability/ios"
+  geocoder:
+    :path: ".symlinks/plugins/geocoder/ios"
   image_gallery_saver:
     :path: ".symlinks/plugins/image_gallery_saver/ios"
   image_picker:
     :path: ".symlinks/plugins/image_picker/ios"
-  location_permissions:
-    :path: ".symlinks/plugins/location_permissions/ios"
+  location:
+    :path: ".symlinks/plugins/location/ios"
   native_device_orientation:
     :path: ".symlinks/plugins/native_device_orientation/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
+  permission:
+    :path: ".symlinks/plugins/permission/ios"
   shared_preferences:
     :path: ".symlinks/plugins/shared_preferences/ios"
-  simple_permissions:
-    :path: ".symlinks/plugins/simple_permissions/ios"
+  url_launcher:
+    :path: ".symlinks/plugins/url_launcher/ios"
 
 SPEC CHECKSUMS:
   connectivity: d5992e3758d68b1c4b12d6e012fe0813f1aa1645
+  esys_flutter_share: 14e6653d540bfe343c331276be9eb26000e718c3
   Flutter: 9d0fac939486c9aba2809b7982dfdbb47a7b0296
+  flutter_email_sender: 3e082af9295b573948e8b2673fc7ad0f7cd7d3b4
   flutter_secure_storage: dbcc8ff35d99569c3a4d3b483afa3339416c1a78
-  geolocator: ac98a5fcdddd7fcbae404b136ab9c33bf08739c7
-  google_api_availability: cd29400b9c6eb73b0978f609f0ad66f41dfa90b4
+  geocoder: 333b5c474623c8223f367b6ac4846b5f9ea72e85
   image_gallery_saver: 131b261a8ab8576f9012ef4115162e5b0d51a07f
   image_picker: 86b84c4fe89267356a1f17297a45b5d317ebd2e7
-  location_permissions: 974d8fbc3ec5fed16908492a5e03bcb3372fcfd9
+  location: 26c90953ad5916331d0d1d913898779910416487
   native_device_orientation: 1126735962ee926c7067a26ee9b0be020d3f5890
   path_provider: 09407919825bfe3c2deae39453b7a5b44f467873
+  permission: 3781bb5a85794b350fa6d978f702abe4d87ff2d9
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   shared_preferences: 5a1d487c427ee18fcd3ea1f2a131569481834b53
-  simple_permissions: 8ea52208b437f8fae29d97a55fe00b705a53246b
+  url_launcher: 92b89c1029a0373879933c21642958c874539095
 
 PODFILE CHECKSUM: 58760ca3c5878cb71ae11bd6eeff33fd4ce06e4f
 

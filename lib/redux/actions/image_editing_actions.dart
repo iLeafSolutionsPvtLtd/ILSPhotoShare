@@ -5,3 +5,9 @@ class UpdateSelectedImage {
 
   UpdateSelectedImage({this.image});
 }
+
+class UpdateLocationName {
+  final String name;
+
+  UpdateLocationName({this.name});
+}
