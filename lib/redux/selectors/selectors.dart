@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:photo_share/models/loading_status.dart';
-import 'package:photo_share/redux/states/app_state.dart';
+import 'package:insta_capture/models/loading_status.dart';
+import 'package:insta_capture/redux/states/app_state.dart';
 
 LoadingStatus isLoadingSelector(AppState state) =>
     state.authState.loadingStatus;

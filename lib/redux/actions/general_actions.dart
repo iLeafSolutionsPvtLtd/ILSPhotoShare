@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:photo_share/models/loading_status.dart';
+import 'package:insta_capture/models/loading_status.dart';
 
 class ChangeLoadingStatusAction {
   final LoadingStatus status;

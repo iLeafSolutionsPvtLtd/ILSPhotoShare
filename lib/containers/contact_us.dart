@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
-import 'package:photo_share/utilities/colors.dart';
+import 'package:insta_capture/utilities/colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ContactUsView extends StatelessWidget {

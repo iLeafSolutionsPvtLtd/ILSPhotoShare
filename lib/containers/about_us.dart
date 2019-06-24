@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:photo_share/utilities/colors.dart';
+import 'package:insta_capture/utilities/colors.dart';
 
 class AboutUsView extends StatefulWidget {
   @override

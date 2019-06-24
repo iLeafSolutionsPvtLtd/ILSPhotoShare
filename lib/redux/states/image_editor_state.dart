@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:meta/meta.dart';
-import 'package:photo_share/models/loading_status.dart';
+import 'package:insta_capture/models/loading_status.dart';
 
 class ImageEditorState {
   final LoadingStatus loadingStatus;

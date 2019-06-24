@@ -5,19 +5,17 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart' show timeDilation;
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_villains/villain.dart';
-import 'package:geocoder/geocoder.dart';
-import 'package:geocoder/model.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:insta_capture/containers/image_editor.dart';
+import 'package:insta_capture/redux/actions/image_editing_actions.dart';
+import 'package:insta_capture/redux/actions/navigation_actions.dart';
+import 'package:insta_capture/redux/middlewares/app_middleware.dart';
+import 'package:insta_capture/redux/reducers/app_state_reducer.dart';
+import 'package:insta_capture/redux/states/app_state.dart';
+import 'package:insta_capture/utilities/colors.dart';
+import 'package:insta_capture/utilities/keys.dart';
 import 'package:location/location.dart';
-import 'package:permission/permission.dart';
-import 'package:photo_share/containers/image_editor.dart';
-import 'package:photo_share/redux/actions/image_editing_actions.dart';
-import 'package:photo_share/redux/actions/navigation_actions.dart';
-import 'package:photo_share/redux/middlewares/app_middleware.dart';
-import 'package:photo_share/redux/reducers/app_state_reducer.dart';
-import 'package:photo_share/redux/states/app_state.dart';
-import 'package:photo_share/utilities/colors.dart';
-import 'package:photo_share/utilities/keys.dart';
 import 'package:redux/redux.dart';
 
 import 'containers/about_us.dart';
@@ -51,7 +49,7 @@ class MyAppBase extends StatelessWidget {
             backgroundColor: Colors.green,
             loadingSplash: Stack(
               children: <Widget>[
-                Gradiant(),
+                GradientView(),
                 Center(
                     child: Hero(
                         tag: "dds", child: Image.asset('assets/logo.png'))),
@@ -89,6 +87,23 @@ class _MyHomePageState extends State<MyHomePage> {
     "assets/contact.png",
   ];
   var titles = ["Camera", "Gallery", "About us", "Contact us"];
+
+  @override
+  void initState() {
+    handlePermission();
+    // TODO: implement initState
+    super.initState();
+  }
+
+  void handlePermission() async {
+    var location = new Location();
+    await location.requestPermission().then((status) {
+      if (status) {
+        print("granded permission for location");
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     timeDilation = 1.0;
@@ -105,7 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
             color: Colors.blue,
             child: Stack(
               children: <Widget>[
-                Gradiant(),
+                GradientView(),
                 Center(
                     child: StoreConnector<AppState, _ViewModel>(
                         converter: _ViewModel.fromStore,
@@ -133,7 +148,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                               fontFamily: 'JTLeonor',
                                               color: Colors.white,
                                               fontWeight: FontWeight.w500,
-                                              fontSize: 50.0),
+                                              fontSize: 30.0),
                                         ),
                                       ),
                                     ],
@@ -186,23 +201,21 @@ class _MyHomePageState extends State<MyHomePage> {
                                                             .getLocation();
                                                     if (currentLocation !=
                                                         null) {
-                                                      final coordinates =
-                                                          new Coordinates(
-                                                              currentLocation
-                                                                  .latitude,
-                                                              currentLocation
-                                                                  .longitude);
-                                                      var addresses = await Geocoder
-                                                          .local
-                                                          .findAddressesFromCoordinates(
-                                                              coordinates);
+                                                      List<Placemark>
+                                                          placeMark =
+                                                          await Geolocator()
+                                                              .placemarkFromCoordinates(
+                                                                  currentLocation
+                                                                      .latitude,
+                                                                  currentLocation
+                                                                      .longitude);
                                                       viewModel
                                                           .updateLocationName(
-                                                              addresses.first
-                                                                  .addressLine);
+                                                              placeMark
+                                                                  .first.name);
                                                     }
                                                   } else {
-                                                    var a = location
+                                                    location
                                                         .requestPermission()
                                                         .then((status) async {
                                                       if (status) {
@@ -211,77 +224,23 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                 .getLocation();
                                                         if (currentLocation !=
                                                             null) {
-                                                          final coordinates =
-                                                              new Coordinates(
+                                                          List<Placemark>
+                                                              placemark =
+                                                              await Geolocator().placemarkFromCoordinates(
                                                                   currentLocation
                                                                       .latitude,
                                                                   currentLocation
                                                                       .longitude);
-                                                          var addresses =
-                                                              await Geocoder
-                                                                  .local
-                                                                  .findAddressesFromCoordinates(
-                                                                      coordinates);
-                                                          print(addresses);
+                                                          viewModel
+                                                              .updateLocationName(
+                                                                  placemark
+                                                                      .first
+                                                                      .name);
                                                         }
                                                       }
                                                     });
                                                   }
-
-                                                  if (Platform.isAndroid) {
-                                                    var permissionNames =
-                                                        await Permission
-                                                            .requestPermissions([
-                                                      PermissionName.Storage,
-                                                    ]);
-
-                                                    switch (permissionNames
-                                                        .first
-                                                        .permissionStatus) {
-                                                      case PermissionStatus
-                                                          .allow:
-                                                        await showCamera(
-                                                            viewModel);
-                                                        // TODO: Handle this case.
-                                                        break;
-                                                      case PermissionStatus
-                                                          .deny:
-                                                        Permission
-                                                            .openSettings();
-
-                                                        // TODO: Handle this case.
-
-                                                        break;
-                                                      case PermissionStatus
-                                                          .notDecided:
-                                                        Permission
-                                                            .openSettings();
-
-                                                        // TODO: Handle this case.
-                                                        break;
-                                                      case PermissionStatus
-                                                          .notAgain:
-                                                        Permission
-                                                            .openSettings();
-
-                                                        // TODO: Handle this case.
-                                                        break;
-                                                      case PermissionStatus
-                                                          .whenInUse:
-                                                        Permission
-                                                            .openSettings();
-                                                        // TODO: Handle this case.
-                                                        break;
-                                                      case PermissionStatus
-                                                          .always:
-                                                        await showCamera(
-                                                            viewModel);
-                                                        // TODO: Handle this case.
-                                                        break;
-                                                    }
-                                                  } else {
-                                                    await showCamera(viewModel);
-                                                  }
+                                                  await showCamera(viewModel);
                                                 },
                                                 color: Colors.white,
                                                 shape: CircleBorder(
@@ -343,8 +302,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class Gradiant extends StatelessWidget {
-  const Gradiant({
+class GradientView extends StatelessWidget {
+  const GradientView({
     Key key,
   }) : super(key: key);
 

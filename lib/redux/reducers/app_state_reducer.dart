@@ -1,4 +1,4 @@
-import 'package:photo_share/redux/states/app_state.dart';
+import 'package:insta_capture/redux/states/app_state.dart';
 
 import 'ImageEditorReducer.dart';
 import 'auth_reducer.dart';

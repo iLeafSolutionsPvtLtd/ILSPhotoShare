@@ -30,6 +30,8 @@
 	<string>iNSTA CAPTURE need camera for capturing images for editing</string>
 	<key>NSContactsUsageDescription</key>
 	<string>iNSTA CAPTURE Contact fetch</string>
+    <key>NSLocationAlwaysAndWhenInUsageDescription</key>
+    <string>our location is required for adding location to your photos</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Your location is required for adding location to your photos </string>
 	<key>NSLocationWhenInUseUsageDescription</key>

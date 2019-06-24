@@ -4,19 +4,21 @@ import 'dart:ui' as ui;
 
 import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:image_saver/image_saver.dart';
+import 'package:insta_capture/main.dart';
+import 'package:insta_capture/redux/actions/image_editing_actions.dart';
+import 'package:insta_capture/redux/actions/navigation_actions.dart';
+import 'package:insta_capture/redux/states/app_state.dart';
+import 'package:insta_capture/utilities/colors.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:photo_share/redux/actions/image_editing_actions.dart';
-import 'package:photo_share/redux/actions/navigation_actions.dart';
-import 'package:photo_share/redux/states/app_state.dart';
-import 'package:photo_share/utilities/colors.dart';
+import 'package:permission/permission.dart';
 import 'package:redux/redux.dart';
 import 'package:screenshot/screenshot.dart';
-
-import '../main.dart';
 
 class ImageEditingView extends StatefulWidget {
   @override
@@ -25,10 +27,11 @@ class ImageEditingView extends StatefulWidget {
 
 class _ImageEditingViewState extends State<ImageEditingView> {
   ScreenshotController screenshotController = ScreenshotController();
-
+  final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       appBar: AppBar(
         title: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -40,7 +43,7 @@ class _ImageEditingViewState extends State<ImageEditingView> {
                 },
                 child: Text(
                   'Cancel',
-                  style: TextStyle(color: Colors.white, fontSize: 18.0),
+                  style: TextStyle(color: Colors.white, fontSize: 15.0),
                 )),
             Text(
               "iNSTA CAPTURE",
@@ -54,10 +57,10 @@ class _ImageEditingViewState extends State<ImageEditingView> {
                       context: context,
                       builder: (BuildContext context) {
                         return Container(
-                          height: 130.0,
+                          height: 150.0,
                           child: Stack(
                             children: <Widget>[
-                              Gradiant(),
+                              GradientView(),
                               Container(
                                 height: 150.0,
                                 child: Padding(
@@ -78,36 +81,9 @@ class _ImageEditingViewState extends State<ImageEditingView> {
                                             children: <Widget>[
                                               FlatButton(
                                                   onPressed: () async {
-                                                    FocusScope.of(context)
-                                                        .requestFocus(
-                                                            new FocusNode());
-                                                    final directory =
-                                                        (await getApplicationDocumentsDirectory())
-                                                            .path; //from path_provide package
-                                                    String fileName =
-                                                        DateTime.now()
-                                                            .toIso8601String();
-                                                    var path =
-                                                        '$directory/$fileName.png';
-                                                    screenshotController
-                                                        .capture(
-                                                      pixelRatio: 2.0,
-                                                      path: path,
-                                                    )
-                                                        .then(
-                                                            (File image) async {
-                                                      final ByteData bytes =
-                                                          await rootBundle
-                                                              .load(image.path);
-                                                      await Share.file(
-                                                          'esys image',
-                                                          'esys.png',
-                                                          bytes.buffer
-                                                              .asUint8List(),
-                                                          'image/png');
-                                                    }).catchError((onError) {
-                                                      print(onError);
-                                                    });
+                                                    Navigator.pop(context);
+
+                                                    await shareImage(context);
                                                   },
                                                   shape: CircleBorder(
                                                       side: BorderSide(
@@ -120,32 +96,50 @@ class _ImageEditingViewState extends State<ImageEditingView> {
                                                   )),
                                               FlatButton(
                                                   onPressed: () async {
-                                                    FocusScope.of(context)
-                                                        .requestFocus(
-                                                            new FocusNode());
-                                                    final directory =
-                                                        (await getApplicationDocumentsDirectory())
-                                                            .path; //from path_provide package
-                                                    String fileName =
-                                                        DateTime.now()
-                                                            .toIso8601String();
-                                                    var path =
-                                                        '$directory/$fileName.png';
-                                                    screenshotController
-                                                        .capture(
-                                                      pixelRatio: 2.0,
-                                                      path: path,
-                                                    )
-                                                        .then(
-                                                            (File image) async {
-                                                      final result =
-                                                          await ImageGallerySaver
-                                                              .save(image
-                                                                  .readAsBytesSync());
-                                                      print(result);
-                                                    }).catchError((onError) {
-                                                      print(onError);
-                                                    });
+                                                    if (Platform.isAndroid) {
+                                                      var permissionNames =
+                                                          await Permission
+                                                              .requestPermissions([
+                                                        PermissionName.Storage,
+                                                      ]);
+
+                                                      switch (permissionNames
+                                                          .first
+                                                          .permissionStatus) {
+                                                        case PermissionStatus
+                                                            .allow:
+                                                          await saveImage(
+                                                              context);
+                                                          break;
+                                                        case PermissionStatus
+                                                            .deny:
+                                                          Permission
+                                                              .openSettings();
+                                                          break;
+                                                        case PermissionStatus
+                                                            .notDecided:
+                                                          Permission
+                                                              .openSettings();
+                                                          break;
+                                                        case PermissionStatus
+                                                            .notAgain:
+                                                          Permission
+                                                              .openSettings();
+                                                          break;
+                                                        case PermissionStatus
+                                                            .whenInUse:
+                                                          Permission
+                                                              .openSettings();
+                                                          break;
+                                                        case PermissionStatus
+                                                            .always:
+                                                          await saveImage(
+                                                              context);
+                                                          break;
+                                                      }
+                                                    } else {
+                                                      await saveImage(context);
+                                                    }
                                                   },
                                                   shape: CircleBorder(
                                                       side: BorderSide(
@@ -170,7 +164,7 @@ class _ImageEditingViewState extends State<ImageEditingView> {
                 },
                 child: Text(
                   'Done',
-                  style: TextStyle(color: Colors.white, fontSize: 18.0),
+                  style: TextStyle(color: Colors.white, fontSize: 15.0),
                 )),
           ],
         ),
@@ -283,6 +277,55 @@ class _ImageEditingViewState extends State<ImageEditingView> {
                 );
               })),
     );
+  }
+
+  Future shareImage(BuildContext context) async {
+    FocusScope.of(context).requestFocus(new FocusNode());
+    final directory = (await getApplicationDocumentsDirectory())
+        .path; //from path_provide package
+    String fileName = DateTime.now().toIso8601String();
+    var path = '$directory/$fileName.png';
+    screenshotController
+        .capture(
+      pixelRatio: 2.0,
+      path: path,
+    )
+        .then((File image) async {
+      final ByteData bytes = await rootBundle.load(image.path);
+      final result = await ImageGallerySaver.save(bytes.buffer.asUint8List());
+      await Share.file('iCapture image', 'icapture.png',
+          bytes.buffer.asUint8List(), 'image/png');
+    }).catchError((onError) {
+      print(onError);
+    });
+  }
+
+  Future saveImage(BuildContext context) async {
+    FocusScope.of(context).requestFocus(new FocusNode());
+    final directory = (await getApplicationDocumentsDirectory())
+        .path; //from path_provide package
+    String fileName = DateTime.now().toIso8601String();
+    var path = '$directory/$fileName.png';
+    screenshotController
+        .capture(
+      pixelRatio: 2.0,
+      path: path,
+    )
+        .then((File image) async {
+      final ByteData bytes = await rootBundle.load(image.path);
+      File savedFile =
+          await ImageSaver.toFile(fileData: bytes.buffer.asUint8List());
+      if (savedFile != null) {
+        Navigator.pop(context);
+        scaffoldKey.currentState.showSnackBar(SnackBar(
+          content: Text('Image saved successfully.'),
+          duration: Duration(seconds: 3),
+        ));
+      }
+      print(savedFile);
+    }).catchError((onError) {
+      print(onError);
+    });
   }
 }
 

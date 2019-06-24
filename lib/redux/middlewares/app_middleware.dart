@@ -1,6 +1,6 @@
-import 'package:photo_share/redux/actions/navigation_actions.dart';
-import 'package:photo_share/redux/states/app_state.dart';
-import 'package:photo_share/utilities/keys.dart';
+import 'package:insta_capture/redux/actions/navigation_actions.dart';
+import 'package:insta_capture/redux/states/app_state.dart';
+import 'package:insta_capture/utilities/keys.dart';
 import 'package:redux/redux.dart';
 
 List<Middleware<AppState>> appMiddleware([AppState state]) {

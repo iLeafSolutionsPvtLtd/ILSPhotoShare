@@ -1,5 +1,5 @@
-import 'package:photo_share/redux/actions/general_actions.dart';
-import 'package:photo_share/redux/states/auth_state.dart';
+import 'package:insta_capture/redux/actions/general_actions.dart';
+import 'package:insta_capture/redux/states/auth_state.dart';
 import 'package:redux/redux.dart';
 
 final authReducer = combineReducers<AuthState>([

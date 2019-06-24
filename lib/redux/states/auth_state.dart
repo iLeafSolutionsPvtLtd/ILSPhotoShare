@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:photo_share/models/api_response_handler.dart';
-import 'package:photo_share/models/loading_status.dart';
+import 'package:insta_capture/models/api_response_handler.dart';
+import 'package:insta_capture/models/loading_status.dart';
 
 class AuthState {
   final LoadingStatus loadingStatus;
