@@ -99,7 +99,9 @@ class _MyHomePageState extends State<MyHomePage> {
     var location = new Location();
     await location.requestPermission().then((status) {
       if (status) {
-        print("granded permission for location");
+       var currentLocation =
+            location
+            .getLocation();
       }
     });
   }
@@ -191,6 +193,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                             height: 100.0,
                                             child: FlatButton(
                                                 onPressed: () async {
+                                                  await showCamera(viewModel);
+
                                                   LocationData currentLocation;
 
                                                   var location = new Location();
@@ -240,7 +244,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                       }
                                                     });
                                                   }
-                                                  await showCamera(viewModel);
+
                                                 },
                                                 color: Colors.white,
                                                 shape: CircleBorder(

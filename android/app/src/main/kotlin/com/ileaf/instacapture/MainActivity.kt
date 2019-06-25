@@ -1,4 +1,4 @@
-package com.ileafsolutions.photo_share
+package com.ileaf.instacapture
 
 import android.os.Bundle
 
